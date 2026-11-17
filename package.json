@@ -11,8 +11,10 @@
     "preview": "vite preview",
     "test": "vitest run",
     "e2e": "playwright test",
-    "vozes": "node scripts/gerar-vozes.mjs",
-    "emoji": "node scripts/copiar-openmoji.mjs"
+    "vozes": "node scripts/gerar-vozes.mjs && node scripts/manifesto-audio.mjs",
+    "emoji": "node scripts/copiar-openmoji.mjs",
+    "predev": "node scripts/manifesto-audio.mjs",
+    "prebuild": "node scripts/manifesto-audio.mjs"
   },
   "author": "",
   "license": "ISC",
