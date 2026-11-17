@@ -94,3 +94,27 @@ button { font: inherit; color: inherit; touch-action: manipulation; }
 .balanca { animation: balancar 0.5s ease-in-out; }
 @keyframes brilhar { 50% { filter: drop-shadow(0 0 18px #ffd166) brightness(1.15); transform: scale(1.08); } }
 .dica { animation: brilhar 0.9s ease-in-out infinite; }
+
+/* ---------- Siga a Música ---------- */
+.musica { position: absolute; inset: 0; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 4vmin; padding: calc(var(--alvo) + 24px) 16px 16px; }
+.xilofone {
+  display: flex; align-items: center; justify-content: center; gap: 2.5vmin;
+  width: min(92vw, 900px); height: min(62vh, 520px);
+  padding: 3vmin; border-radius: var(--raio);
+  background: linear-gradient(180deg, #8d5a3b, #6b4226); box-shadow: var(--sombra);
+}
+.tecla {
+  position: relative; flex: 1 1 0; max-width: 150px; min-width: 60px; height: var(--altura);
+  border: 0; border-radius: 18px; cursor: pointer;
+  background: linear-gradient(180deg, color-mix(in srgb, var(--cor) 80%, #fff), var(--cor));
+  box-shadow: inset 0 -8px 0 rgba(0,0,0,0.15), 0 4px 0 rgba(0,0,0,0.25);
+  transition: filter 0.1s;
+}
+.tecla i { position: absolute; left: 50%; width: 14px; height: 14px; margin-left: -7px; border-radius: 50%; background: #d9d9d9; box-shadow: inset 0 -2px 0 #999; }
+.tecla i:first-child { top: 10%; }
+.tecla i:last-child { bottom: 10%; }
+.tecla.acesa { filter: brightness(1.35) drop-shadow(0 0 16px var(--cor)); }
+.botao-livre { width: var(--alvo); height: var(--alvo); padding: 10px; border: 0; border-radius: 50%; background: #fff; box-shadow: var(--sombra); cursor: pointer; }
+.botao-livre.ativo { background: #e9d5ff; outline: 4px solid #c77dff; }
+.botao-livre svg { width: 100%; height: 100%; }
+@media (orientation: portrait) { .xilofone { height: min(50vh, 520px); gap: 2vmin; padding: 2vmin; } }

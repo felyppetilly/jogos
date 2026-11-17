@@ -13,4 +13,11 @@ export function getSeed() {
   return isTestMode() ? 1 : (Date.now() % 2147483647) || 1;
 }
 
+// Quanto o tempo é acelerado no modo de teste (?acelera=N; padrão 50).
+export function getAccel() {
+  if (!isTestMode()) return 1;
+  const a = Number(params.get('acelera'));
+  return Number.isFinite(a) && a > 0 ? a : 50;
+}
+
 export const testLog = { vozLog: [], rodada: null };

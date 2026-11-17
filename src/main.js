@@ -1,5 +1,5 @@
 import { gsap } from 'gsap';
-import { isTestMode, getSeed, testLog } from './core/test-mode.js';
+import { isTestMode, getSeed, getAccel, testLog } from './core/test-mode.js';
 import { createRng } from './core/random.js';
 import { createVoice, createAudioPlayer, createTestPlayer } from './core/voice.js';
 import { unlockAudio, getAudioElement, installVisibilityResume } from './core/audio.js';
@@ -11,17 +11,20 @@ import { parseRoute, navigate } from './router.js';
 import { mountStart } from './screens/start.js';
 import { mountMenu } from './screens/menu.js';
 import * as placeholder from './games/placeholder.js';
+import * as musica from './games/musica/view.js';
 
-const JOGOS = { musica: placeholder, letras: placeholder, bolo: placeholder };
+const JOGOS = { musica, letras: placeholder, bolo: placeholder };
 
 const teste = isTestMode();
 if (teste) {
   window.__jogos = testLog;
-  gsap.globalTimeline.timeScale(50);
+  gsap.globalTimeline.timeScale(getAccel());
 }
 
 const app = document.getElementById('app');
 const rng = createRng(getSeed());
+const acel = getAccel();
+const wait = (ms) => new Promise((r) => setTimeout(r, ms / acel));
 let voice = null;
 let iniciado = false;
 let desmontar = null;
@@ -52,6 +55,7 @@ function render() {
     voice,
     rng,
     shell,
+    wait,
     testLog,
     celebrate: createCelebrate({ voice, rng }),
     difficulty: (gameId, minLevel, maxLevel) => createDifficulty({ gameId, minLevel, maxLevel }),
