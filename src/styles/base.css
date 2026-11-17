@@ -39,3 +39,58 @@ body {
 
 img { -webkit-user-drag: none; pointer-events: none; }
 button { font: inherit; color: inherit; touch-action: manipulation; }
+
+/* ---------- Início ---------- */
+.tela-inicio {
+  position: absolute; inset: 0;
+  display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 24px;
+  background: radial-gradient(circle at 50% 40%, #fff9ef 0%, var(--fundo) 45%, var(--fundo-2) 100%);
+}
+.botao-comecar {
+  width: min(55vmin, 320px); aspect-ratio: 1; border: 0; padding: 0; background: none; cursor: pointer;
+  filter: drop-shadow(0 10px 0 rgba(74, 44, 26, 0.2));
+
+}
+.botao-comecar svg { width: 100%; height: 100%; animation: pulsar 1.6s ease-in-out infinite; }
+@keyframes pulsar { 50% { transform: scale(1.06); } }
+.dica-instalar { max-width: 32em; margin: 0 16px; text-align: center; font-size: 15px; opacity: 0.7; }
+
+/* ---------- Menu ---------- */
+.menu {
+  position: absolute; inset: 0;
+  display: flex; align-items: center; justify-content: center; gap: 4vmin; padding: 4vmin;
+  background: linear-gradient(180deg, #fff9ef, var(--fundo-2));
+}
+@media (orientation: portrait) { .menu { flex-direction: column; } }
+.cartao {
+  flex: 0 1 auto;
+  width: min(28vw, 70vh, 300px); aspect-ratio: 1;
+  border: 0; border-radius: var(--raio); box-shadow: var(--sombra); cursor: pointer;
+  display: grid; place-items: center;
+  transition: transform 0.12s;
+}
+@media (orientation: portrait) { .cartao { width: min(28vh, 70vw, 300px); } }
+.cartao:active { transform: scale(0.95); }
+.cartao img { width: 80%; height: 80%; }
+
+/* ---------- Moldura do jogo ---------- */
+.jogo { background: linear-gradient(180deg, #fff9ef, var(--fundo-2)); }
+.jogo-conteudo { position: absolute; inset: 0; }
+.canto {
+  position: absolute; top: max(10px, env(safe-area-inset-top)); z-index: 10;
+  width: var(--alvo); height: var(--alvo); padding: 10px;
+  border: 0; border-radius: 50%; background: #fff; box-shadow: var(--sombra); cursor: pointer;
+}
+.canto svg { width: 100%; height: 100%; }
+.canto-esq { left: max(10px, env(safe-area-inset-left)); }
+.canto-dir { right: max(10px, env(safe-area-inset-right)); }
+
+/* ---------- Confete ---------- */
+.confete { position: fixed; inset: 0; pointer-events: none; z-index: 50; overflow: hidden; }
+.confete i { position: absolute; top: 0; width: 14px; height: 14px; }
+
+/* ---------- Animações de erro e dica ---------- */
+@keyframes balancar { 20% { transform: rotate(-12deg); } 40% { transform: rotate(10deg); } 60% { transform: rotate(-6deg); } 80% { transform: rotate(4deg); } }
+.balanca { animation: balancar 0.5s ease-in-out; }
+@keyframes brilhar { 50% { filter: drop-shadow(0 0 18px #ffd166) brightness(1.15); transform: scale(1.08); } }
+.dica { animation: brilhar 0.9s ease-in-out infinite; }
