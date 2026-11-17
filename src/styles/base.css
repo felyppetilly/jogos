@@ -1,0 +1,41 @@
+:root {
+  --fundo: #fff4e0;
+  --fundo-2: #ffe3b8;
+  --tinta: #4a2c1a;
+  --destaque: #ff6b6b;
+  --alvo: max(60px, min(80px, 16vmin));
+  --raio: 28px;
+  --sombra: 0 6px 0 rgba(74, 44, 26, 0.18);
+  color-scheme: light;
+}
+
+* { box-sizing: border-box; }
+
+html, body {
+  margin: 0;
+  height: 100%;
+  background: var(--fundo);
+  color: var(--tinta);
+  font-family: "Trebuchet MS", "Arial Rounded MT Bold", system-ui, sans-serif;
+}
+
+body {
+  position: fixed;
+  inset: 0;
+  overflow: hidden;
+  overscroll-behavior: none;
+  touch-action: manipulation;
+  -webkit-touch-callout: none;
+  -webkit-user-select: none;
+  user-select: none;
+  -webkit-tap-highlight-color: transparent;
+}
+
+#app {
+  position: absolute;
+  inset: 0;
+  padding: env(safe-area-inset-top) env(safe-area-inset-right) env(safe-area-inset-bottom) env(safe-area-inset-left);
+}
+
+img { -webkit-user-drag: none; pointer-events: none; }
+button { font: inherit; color: inherit; touch-action: manipulation; }
