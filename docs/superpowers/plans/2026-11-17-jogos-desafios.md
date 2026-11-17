@@ -69,7 +69,7 @@ tests/e2e/*.spec.js            Playwright
 
 ---
 
-### Tarefa 1: Esqueleto do projeto
+### Task 1: Esqueleto do projeto
 
 **Arquivos:**
 - Criar: `package.json`, `index.html`, `vite.config.js`, `vitest.config.js`, `playwright.config.js`, `.gitignore`, `src/main.js`, `src/styles/base.css`, `src/core/test-mode.js`, `tests/e2e/esqueleto.spec.js`
@@ -97,7 +97,7 @@ test('carrega e expõe o modo de teste', async ({ page }) => {
 - [ ] **Passo 8:** rodar `npm run e2e`. Esperado: PASSA nos 2 projetos.
 - [ ] **Passo 9:** commit `chore: esqueleto do projeto com Vite, Vitest e Playwright`.
 
-### Tarefa 2: Aleatoriedade e dificuldade adaptativa
+### Task 2: Aleatoriedade e dificuldade adaptativa
 
 **Arquivos:**
 - Criar: `src/core/random.js`, `src/core/difficulty.js`, `tests/unit/difficulty.test.js`, `tests/unit/random.test.js`
@@ -139,7 +139,7 @@ test('storage que lança exceção ou valor lixo não quebra', () => {
 - [ ] **Passo 4:** `npx vitest run tests/unit`. Esperado: PASSA.
 - [ ] **Passo 5:** commit `feat: rng com semente e dificuldade adaptativa`.
 
-### Tarefa 3: Catálogo de falas, voz e áudio
+### Task 3: Catálogo de falas, voz e áudio
 
 **Arquivos:**
 - Criar: `src/core/phrases.js`, `src/core/voice.js`, `src/core/audio.js`, `scripts/manifesto-audio.mjs`, `public/audio/gravado/.gitkeep`, `public/audio/manifesto.json` (inicial: `{"voz":[],"gravado":[]}`), `tests/unit/voice.test.js`, `tests/unit/audio.test.js`, `tests/unit/phrases.test.js`
@@ -201,7 +201,7 @@ test('retoma AudioContext ao voltar para a frente', () => {
 - [ ] **Passo 4:** `npx vitest run tests/unit`. Esperado: PASSA.
 - [ ] **Passo 5:** commit `feat: catálogo de falas, voz com fila e áudio para iOS`.
 
-### Tarefa 4: Telas de início e menu, roteador, moldura e comemoração
+### Task 4: Telas de início e menu, roteador, moldura e comemoração
 
 **Arquivos:**
 - Criar: `src/router.js`, `src/screens/start.js`, `src/screens/menu.js`, `src/core/shell.js`, `src/core/celebrate.js`, `tests/unit/router.test.js`, `tests/e2e/navegacao.spec.js`
@@ -245,7 +245,7 @@ test('não há links externos', async ({ page }) => { /* page.locator('a[href^="
 - [ ] **Passo 4:** `npx vitest run tests/unit && npm run e2e`. Esperado: PASSA nos 2 projetos.
 - [ ] **Passo 5:** commit `feat: início, menu, roteador, moldura e comemoração`.
 
-### Tarefa 5: Siga a Música
+### Task 5: Siga a Música
 
 **Arquivos:**
 - Criar: `src/games/musica/logic.js`, `src/games/musica/view.js`, `tests/unit/musica.test.js`, `tests/e2e/musica.spec.js`
@@ -287,7 +287,7 @@ test('5 teclas cabem no iPhone em retrato', async ({ page }) => { /* subir ao n�
 - [ ] **Passo 4:** rodar de novo. Esperado: PASSA.
 - [ ] **Passo 5:** commit `feat: jogo Siga a Música`.
 
-### Tarefa 6: Letra Inicial com Dinossauros
+### Task 6: Letra Inicial com Dinossauros
 
 **Arquivos:**
 - Criar: `src/games/letras/logic.js`, `src/games/letras/view.js`, `scripts/copiar-openmoji.mjs`, `public/creditos.txt`, `tests/unit/letras.test.js`, `tests/e2e/letras.spec.js`
@@ -361,7 +361,7 @@ test('toque duplo no ovo certo conta uma vez', async ({ page }) => { /* dois poi
 - [ ] **Passo 4:** rodar os testes de letras e a suíte unitária inteira (o teste de `phrases` continua passando). Esperado: PASSA.
 - [ ] **Passo 5:** commit `feat: jogo Letra Inicial com Dinossauros`.
 
-### Tarefa 7: Continhas no Bolo
+### Task 7: Continhas no Bolo
 
 **Arquivos:**
 - Criar: `src/games/bolo/logic.js`, `src/games/bolo/view.js`, `tests/unit/bolo.test.js`, `tests/e2e/bolo.spec.js`
@@ -408,7 +408,7 @@ test('girar o aparelho mantém coberturas tocáveis', async ({ page }) => { /* n
 - [ ] **Passo 4:** rodar os testes de bolo e a suíte completa (`npm test && npm run e2e`). Esperado: PASSA.
 - [ ] **Passo 5:** commit `feat: jogo Continhas no Bolo`.
 
-### Tarefa 8: Geração das vozes
+### Task 8: Geração das vozes
 
 **Arquivos:**
 - Criar: `scripts/gerar-vozes.mjs`, `tests/unit/gerar-vozes.test.js`, `public/audio/voz/*.mp3` (gerados)
@@ -433,7 +433,7 @@ test('girar o aparelho mantém coberturas tocáveis', async ({ page }) => { /* n
 - [ ] **Passo 7:** `npm run e2e`. Esperado: PASSA (o modo de teste não toca áudio real).
 - [ ] **Passo 8:** commit `feat: vozes geradas em pt-BR`.
 
-### Tarefa 9: PWA, ícones e offline
+### Task 9: PWA, ícones e offline
 
 **Arquivos:**
 - Criar: `public/icons/apple-touch-icon-180.png`, `icon-192.png`, `icon-512.png` (dino 1F995 sobre fundo de cor sólida, gerados a partir do SVG com `sharp` em `scripts/icones.mjs`), `tests/e2e/offline.spec.js`
@@ -465,7 +465,7 @@ test('manifest standalone', async ({ page }) => { /* fetch do manifest → displ
 - [ ] **Passo 4:** rodar `npm run build && npx playwright test tests/e2e/offline.spec.js`. Esperado: PASSA. Depois, a suíte completa.
 - [ ] **Passo 5:** commit `feat: PWA instalável e offline`.
 
-### Tarefa 10: Publicação no GitHub Pages
+### Task 10: Publicação no GitHub Pages
 
 **Arquivos:**
 - Criar: `.github/workflows/deploy.yml`, `README.md` (como rodar, como gerar vozes, como substituir uma fala pela voz do pai colocando `public/audio/gravado/<id>.mp3`, como instalar no iPad e ativar o Acesso Guiado, créditos OpenMoji)
