@@ -79,3 +79,16 @@ test('girar o aparelho mantém coberturas tocáveis', async ({ page }) => {
     }
   }
 });
+
+test('o desenho da cobertura ocupa quase todo o botão (visível para a criança)', async ({ page }) => {
+  await abrir(page, 'bolo', { nivel: { bolo: 1 }, semente: 3 });
+  await livre(page);
+  const cobs = page.getByTestId('cobertura');
+  const n = await cobs.count();
+  expect(n).toBeGreaterThan(0);
+  for (let i = 0; i < n; i++) {
+    const botao = await cobs.nth(i).boundingBox();
+    const desenho = await cobs.nth(i).locator('img').boundingBox();
+    expect(desenho.width).toBeGreaterThanOrEqual(botao.width * 0.75);
+  }
+});

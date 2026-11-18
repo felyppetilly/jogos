@@ -163,8 +163,8 @@ button { font: inherit; color: inherit; touch-action: manipulation; }
 .vela { display: block; width: calc(var(--alvo) * 0.32); }
 .vela svg { width: 100%; display: block; }
 .topo { position: relative; width: min(90%, 560px); height: calc(var(--alvo) * 2.1); margin-bottom: calc(var(--alvo) * -0.45); z-index: 2; }
-.cobertura { position: absolute; padding: 6%; border: 0; background: none; cursor: pointer; }
-.cobertura img { width: 100%; height: 100%; }
+.cobertura { position: absolute; padding: 0; border: 0; background: none; cursor: pointer; display: grid; place-items: center; }
+.cobertura img { width: 90%; height: 90%; }
 .selo {
   position: absolute; right: -4px; top: -4px; min-width: 28px; height: 28px; padding: 0 6px;
   border-radius: 14px; background: #fff; border: 3px solid var(--tinta); font-weight: 900; font-size: 16px; line-height: 22px;
