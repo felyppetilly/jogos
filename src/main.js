@@ -10,11 +10,11 @@ import { BASE } from './core/ui.js';
 import { parseRoute, navigate } from './router.js';
 import { mountStart } from './screens/start.js';
 import { mountMenu } from './screens/menu.js';
-import * as placeholder from './games/placeholder.js';
 import * as musica from './games/musica/view.js';
 import * as letras from './games/letras/view.js';
+import * as bolo from './games/bolo/view.js';
 
-const JOGOS = { musica, letras, bolo: placeholder };
+const JOGOS = { musica, letras, bolo };
 
 const teste = isTestMode();
 if (teste) {
