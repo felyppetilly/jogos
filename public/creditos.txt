@@ -1,3 +1,5 @@
 Créditos
 
 Emojis: OpenMoji (openmoji.org), licença CC BY-SA 4.0.
+
+Vozes: geradas por IA (OpenAI gpt-4o-mini-tts, voz marin).
