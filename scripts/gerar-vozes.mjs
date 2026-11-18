@@ -5,7 +5,7 @@
 //   node scripts/gerar-vozes.mjs                 gera só o que falta
 //   node scripts/gerar-vozes.mjs --force         regera tudo
 //   node scripts/gerar-vozes.mjs --so=letras.    regera só os IDs com esse prefixo
-//   --voz=marin   troca a voz (padrão: coral)
+//   --voz=coral   troca a voz (padrão: marin)
 //   --saida=pasta grava em outra pasta (para comparar vozes sem mexer no site)
 //
 // Precisa de OPENAI_API_KEY no ambiente.
@@ -63,7 +63,7 @@ async function main() {
   const args = process.argv.slice(2);
   const opt = (nome) => args.find((a) => a.startsWith(`--${nome}=`))?.split('=')[1];
   const so = opt('so');
-  const voz = opt('voz') || 'coral';
+  const voz = opt('voz') || 'marin';
   const pastaPadrao = join(AQUI, '..', 'public', 'audio', 'voz');
   const pasta = opt('saida') ? resolve(opt('saida')) : pastaPadrao;
   const force = args.includes('--force') || Boolean(so);
