@@ -13,6 +13,10 @@ import { mountMenu } from './screens/menu.js';
 import * as musica from './games/musica/view.js';
 import * as letras from './games/letras/view.js';
 import * as bolo from './games/bolo/view.js';
+import { registerSW } from 'virtual:pwa-register';
+
+// Guarda o site no aparelho para funcionar sem internet (só no build; no dev não faz nada).
+registerSW({ immediate: true });
 
 const JOGOS = { musica, letras, bolo };
 

@@ -14,7 +14,9 @@
     "vozes": "node scripts/gerar-vozes.mjs && node scripts/manifesto-audio.mjs",
     "emoji": "node scripts/copiar-openmoji.mjs",
     "predev": "node scripts/manifesto-audio.mjs",
-    "prebuild": "node scripts/manifesto-audio.mjs"
+    "prebuild": "node scripts/manifesto-audio.mjs",
+    "icones": "node scripts/icones.mjs",
+    "e2e:offline": "playwright test -c playwright.offline.config.js"
   },
   "author": "",
   "license": "ISC",
@@ -25,6 +27,7 @@
   "devDependencies": {
     "@playwright/test": "^1.65.1",
     "openmoji": "^17.0.0",
+    "sharp": "^0.34.5",
     "vite": "^6.4.6",
     "vite-plugin-pwa": "^2.0.0",
     "vitest": "^3.2.7"

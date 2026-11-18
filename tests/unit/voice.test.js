@@ -1,5 +1,5 @@
-import { test, expect, vi } from 'vitest';
-import { createVoice } from '../../src/core/voice.js';
+import { test, expect, vi, describe, it } from 'vitest';
+import { createVoice, createAudioPlayer } from '../../src/core/voice.js';
 
 function fakePlayer({ pendente = false } = {}) {
   const chamadas = [];
@@ -86,4 +86,47 @@ test('sayAll fala em sequência', async () => {
   const v = createVoice({ manifest: { voz: [], gravado: [] }, base: '/', player: p });
   await v.sayAll(['bolo.tem.morango.2', 'bolo.caiu.morango.1']);
   expect(p.chamadas.map((c) => c[1])).toEqual(['bolo.tem.morango.2', 'bolo.caiu.morango.1']);
+});
+
+describe('createAudioPlayer', () => {
+  const fakeAudio = () => {
+    const el = { src: '', play() { setTimeout(() => el.onended?.(), 0); return Promise.resolve(); }, pause() {} };
+    return el;
+  };
+
+  it('toca a partir do blob carregado (evita Range do Safari no service worker)', async () => {
+    const el = fakeAudio();
+    const player = createAudioPlayer(el, { carregar: async (u) => `blob:${u}` });
+    expect(await player.playUrl('audio/voz/a.mp3')).toBe(true);
+    expect(el.src).toBe('blob:audio/voz/a.mp3');
+  });
+
+  it('carrega cada arquivo uma vez só', async () => {
+    const el = fakeAudio();
+    let n = 0;
+    const player = createAudioPlayer(el, { carregar: async (u) => { n++; return `blob:${u}`; } });
+    await player.playUrl('a.mp3');
+    await player.playUrl('a.mp3');
+    expect(n).toBe(1);
+  });
+
+  it('se o carregamento falha, usa a URL direta', async () => {
+    const el = fakeAudio();
+    const player = createAudioPlayer(el, { carregar: async () => { throw new Error('x'); } });
+    expect(await player.playUrl('a.mp3')).toBe(true);
+    expect(el.src).toBe('a.mp3');
+  });
+
+  it('stop durante o carregamento não deixa tocar depois', async () => {
+    const el = fakeAudio();
+    let tocou = false;
+    el.play = () => { tocou = true; return Promise.resolve(); };
+    let libera;
+    const player = createAudioPlayer(el, { carregar: () => new Promise((r) => { libera = () => r('blob:a'); }) });
+    const p = player.playUrl('a.mp3');
+    player.stop();
+    libera();
+    expect(await p).toBe(true);
+    expect(tocou).toBe(false);
+  });
 });

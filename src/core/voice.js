@@ -85,19 +85,38 @@ export function createVoice({ manifest, base = '/', player }) {
 
 // Player real: um único <audio> reaproveitado (o iOS só libera áudio num elemento
 // que já tocou após um toque) + voz do navegador como reserva.
-export function createAudioPlayer(audioEl) {
+// O mp3 é baixado com fetch e tocado de um blob: o Safari pede áudio em pedaços
+// (Range) e o cache offline devolve o arquivo inteiro, o que o iOS às vezes
+// recusa tocar. Do blob ele sempre toca.
+async function carregarBlob(url) {
+  const resp = await fetch(url);
+  if (!resp.ok) throw new Error(`HTTP ${resp.status}`);
+  return URL.createObjectURL(await resp.blob());
+}
+
+export function createAudioPlayer(audioEl, { carregar = carregarBlob } = {}) {
   let finish = null;
+  const blobs = new Map();
+  const obter = (url) => {
+    if (!blobs.has(url)) {
+      blobs.set(url, carregar(url).catch(() => { blobs.delete(url); return url; }));
+    }
+    return blobs.get(url);
+  };
   return {
     playUrl(url) {
       return new Promise((resolve) => {
         let done = false;
         const end = (ok) => { if (!done) { done = true; finish = null; resolve(ok); } };
         finish = () => end(true);
-        audioEl.onended = () => end(true);
-        audioEl.onerror = () => end(false);
-        audioEl.src = url;
-        const p = audioEl.play();
-        if (p?.catch) p.catch(() => end(false));
+        obter(url).then((src) => {
+          if (done) return; // stop() chegou durante o carregamento
+          audioEl.onended = () => end(true);
+          audioEl.onerror = () => end(false);
+          audioEl.src = src;
+          const p = audioEl.play();
+          if (p?.catch) p.catch(() => end(false));
+        });
       });
     },
     speak(text) {
