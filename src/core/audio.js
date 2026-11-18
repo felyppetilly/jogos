@@ -25,18 +25,17 @@ export function getAudioElement() {
 
 const SILENCIO = 'data:audio/wav;base64,UklGRiQAAABXQVZFZm10IBAAAAABAAEAQB8AAEAfAAABAAgAZGF0YQAAAAA=';
 
-// Chamar dentro do primeiro toque da criança.
-export async function unlockAudio() {
+// Chamar dentro do primeiro toque da criança. O play() precisa acontecer na hora,
+// sem nenhum await antes: o iOS só libera o áudio se ele vier do próprio toque.
+export function unlockAudio({ el = getAudioElement(), ctx: c = getAudioContext() } = {}) {
   try {
     if (navigator.audioSession) navigator.audioSession.type = 'playback';
   } catch { /* navegador sem audioSession */ }
-  const c = getAudioContext();
-  try { await c?.resume(); } catch { /* ignora */ }
-  const el = getAudioElement();
   try {
     el.src = SILENCIO;
-    await el.play();
+    el.play()?.catch?.(() => {});
   } catch { /* ignora */ }
+  try { c?.resume()?.catch?.(() => {}); } catch { /* ignora */ }
 }
 
 export function installVisibilityResume(doc = globalThis.document, ctxGetter = getAudioContext) {

@@ -9,7 +9,8 @@ export function mountStart(root, { onStart }) {
   btn.className = 'botao-comecar';
   btn.setAttribute('aria-label', 'Começar');
   btn.innerHTML = `<svg viewBox="0 0 100 100" aria-hidden="true"><circle cx="50" cy="50" r="46" fill="#ff6b6b"/><path d="M40 28 L74 50 L40 72 Z" fill="#fff" stroke="#fff" stroke-width="6" stroke-linejoin="round"/></svg>`;
-  btn.addEventListener('pointerdown', (e) => { e.preventDefault(); onStart(); }, { once: true });
+  // 'click' (e não pointerdown): no iOS só o fim do toque conta como gesto que libera o som.
+  btn.addEventListener('click', (e) => { e.preventDefault(); onStart(); }, { once: true });
   tela.append(btn);
 
   const ua = navigator.userAgent;

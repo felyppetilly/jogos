@@ -130,3 +130,62 @@ describe('createAudioPlayer', () => {
     expect(tocou).toBe(false);
   });
 });
+
+describe('createAudioPlayer não trava a fila', () => {
+  const mudo = () => ({ src: '', duration: NaN, play: () => Promise.resolve(), pause() {} });
+  const carregar = async (u) => u;
+
+  it('áudio que nunca termina é liberado pelo vigia', async () => {
+    vi.useFakeTimers();
+    try {
+      const player = createAudioPlayer(mudo(), { carregar });
+      let ok = null;
+      player.playUrl('a.mp3').then((v) => { ok = v; });
+      await vi.advanceTimersByTimeAsync(7000);
+      expect(ok).toBe(null);
+      await vi.advanceTimersByTimeAsync(2000);
+      expect(ok).toBe(true);
+    } finally { vi.useRealTimers(); }
+  });
+
+  it('com a duração conhecida, o vigia usa duração + folga', async () => {
+    vi.useFakeTimers();
+    try {
+      const el = mudo();
+      const player = createAudioPlayer(el, { carregar });
+      let ok = null;
+      player.playUrl('a.mp3').then((v) => { ok = v; });
+      await vi.advanceTimersByTimeAsync(0);
+      el.duration = 1;
+      el.ondurationchange?.();
+      await vi.advanceTimersByTimeAsync(2600);
+      expect(ok).toBe(true);
+    } finally { vi.useRealTimers(); }
+  });
+
+  it('pausa feita pelo sistema (ligação, Siri, tela bloqueada) libera a fala', async () => {
+    const el = mudo();
+    const player = createAudioPlayer(el, { carregar });
+    const p = player.playUrl('a.mp3');
+    await new Promise((r) => setTimeout(r, 0));
+    el.onpause?.();
+    expect(await p).toBe(true);
+  });
+
+  it('voz do navegador que nunca termina é liberada pelo vigia', async () => {
+    vi.useFakeTimers();
+    const antes = [globalThis.speechSynthesis, globalThis.SpeechSynthesisUtterance];
+    globalThis.speechSynthesis = { speak() {}, cancel() {} };
+    globalThis.SpeechSynthesisUtterance = function (t) { this.text = t; };
+    try {
+      const player = createAudioPlayer(mudo(), { carregar });
+      let fim = false;
+      player.speak('Oi! Vamos brincar?').then(() => { fim = true; });
+      await vi.advanceTimersByTimeAsync(9000);
+      expect(fim).toBe(true);
+    } finally {
+      [globalThis.speechSynthesis, globalThis.SpeechSynthesisUtterance] = antes;
+      vi.useRealTimers();
+    }
+  });
+});

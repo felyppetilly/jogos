@@ -17,6 +17,9 @@ export function mount(root, ctx) {
   let vivo = true;
   let nTeclas = 0;
   let teclas = [];
+  // Cada apresentação ganha um número; ligar o modo livre ou começar outra
+  // cancela a anterior (assim nunca tocam duas ao mesmo tempo).
+  let apresentacao = 0;
 
   root.innerHTML = '';
   const palco = document.createElement('div');
@@ -56,9 +59,11 @@ export function mount(root, ctx) {
     setTimeout(() => t.classList.remove('acesa'), ms);
   }
 
-  async function tocarSequencia(ms) {
+  const atual = (n) => vivo && !modoLivre && n === apresentacao;
+
+  async function tocarSequencia(ms, n) {
     for (const i of seq) {
-      if (!vivo) return;
+      if (!atual(n)) return;
       playNote(i, ms * 0.8);
       acender(i, ms * 0.8);
       await wait(ms);
@@ -66,14 +71,17 @@ export function mount(root, ctx) {
   }
 
   async function apresentar(ms = 600) {
+    const n = ++apresentacao;
+    if (!atual(n)) return; // no modo livre a rodada espera ela voltar ao desafio
     shell.setBusy(true);
     await wait(400);
-    if (!vivo) return;
+    if (!atual(n)) return;
     await voice.say('musica.escuta');
-    await tocarSequencia(ms);
-    if (!vivo) return;
+    if (!atual(n)) return;
+    await tocarSequencia(ms, n);
+    if (!atual(n)) return;
     await voice.say('musica.suavez');
-    if (vivo && !modoLivre) shell.setBusy(false);
+    if (atual(n)) shell.setBusy(false);
   }
 
   function novaRodada() {
@@ -119,6 +127,7 @@ export function mount(root, ctx) {
     btnLivre.classList.toggle('ativo', modoLivre);
     input = [];
     if (modoLivre) {
+      apresentacao++; // cancela a apresentação em andamento
       shell.setBusy(false);
       voice.say('musica.livre', { interrupt: true });
     } else {

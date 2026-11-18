@@ -62,3 +62,32 @@ test('5 teclas cabem na tela no nível 5', async ({ page }) => {
     expect(dentroDaTela(box, vp)).toBe(true);
   }
 });
+
+const toque = (page, testid) => page.evaluate((id) => {
+  document.querySelector(`[data-testid="${id}"]`)
+    .dispatchEvent(new PointerEvent('pointerdown', { bubbles: true, cancelable: true }));
+}, testid);
+
+test('ligar o modo livre logo depois de errar não deixa as teclas mortas', async ({ page }) => {
+  await abrir(page, 'musica');
+  await livre(page);
+  const r1 = await rodada(page);
+  const errada = r1.seq[0] === 0 ? 1 : 0;
+  await toque(page, `tecla-${errada}`);
+  await toque(page, 'tocar-livre');
+  await page.waitForTimeout(800);
+  await expect(page.getByTestId('tocar-livre')).toHaveClass(/ativo/);
+  await livre(page);
+});
+
+test('ligar e desligar o livre na apresentação não duplica a sequência', async ({ page }) => {
+  await page.goto('/?teste=1&acelera=1#/musica');
+  await page.getByTestId('comecar').click();
+  await expect(page.locator('#app.ocupado')).toHaveCount(1);
+  await toque(page, 'tocar-livre');
+  await toque(page, 'tocar-livre');
+  await livre(page);
+  await page.waitForTimeout(1500);
+  const suavez = (await vozLog(page)).filter((id) => id === 'musica.suavez');
+  expect(suavez.length).toBe(1);
+});

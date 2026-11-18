@@ -35,7 +35,7 @@ export function createDifficulty({ gameId, minLevel, maxLevel, storage = default
     startRound() { wrongInRound = 0; },
     recordWrong() {
       wrongInRound++;
-      return { showHint: wrongInRound === DICA_NO_ERRO };
+      return { showHint: wrongInRound >= DICA_NO_ERRO };
     },
     recordWin() {
       let levelChanged = 0;

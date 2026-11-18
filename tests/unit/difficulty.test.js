@@ -24,12 +24,12 @@ test('vitória com erro zera a sequência', () => {
   expect(d.level).toBe(1);
 });
 
-test('dica no segundo erro da rodada', () => {
+test('dica a partir do segundo erro da rodada', () => {
   const d = createDifficulty({ gameId: 'x', minLevel: 1, maxLevel: 5, storage: memoria() });
   d.startRound();
   expect(d.recordWrong().showHint).toBe(false);
   expect(d.recordWrong().showHint).toBe(true);
-  expect(d.recordWrong().showHint).toBe(false);
+  expect(d.recordWrong().showHint).toBe(true);
 });
 
 test('3 rodadas com dica descem um nível', () => {

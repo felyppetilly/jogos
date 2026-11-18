@@ -103,16 +103,33 @@ export function createAudioPlayer(audioEl, { carregar = carregarBlob } = {}) {
     }
     return blobs.get(url);
   };
+  // Vigia: se o iOS pausar o áudio (ligação, Siri, tela bloqueada) ou a voz do
+  // navegador nunca avisar que terminou, a fala é dada como encerrada, para a
+  // fila andar e o jogo nunca ficar travado esperando.
+  let vigia = null;
+  const vigiar = (ms, fn) => { clearTimeout(vigia); vigia = setTimeout(fn, ms); };
   return {
     playUrl(url) {
       return new Promise((resolve) => {
         let done = false;
-        const end = (ok) => { if (!done) { done = true; finish = null; resolve(ok); } };
+        const end = (ok) => {
+          if (done) return;
+          done = true;
+          finish = null;
+          clearTimeout(vigia);
+          audioEl.onpause = audioEl.ondurationchange = null;
+          resolve(ok);
+        };
         finish = () => end(true);
         obter(url).then((src) => {
           if (done) return; // stop() chegou durante o carregamento
           audioEl.onended = () => end(true);
           audioEl.onerror = () => end(false);
+          audioEl.onpause = () => end(true);
+          audioEl.ondurationchange = () => {
+            if (Number.isFinite(audioEl.duration)) vigiar(audioEl.duration * 1000 + 1500, () => end(true));
+          };
+          vigiar(8000, () => end(true));
           audioEl.src = src;
           const p = audioEl.play();
           if (p?.catch) p.catch(() => end(false));
@@ -123,11 +140,14 @@ export function createAudioPlayer(audioEl, { carregar = carregarBlob } = {}) {
       return new Promise((resolve) => {
         const synth = globalThis.speechSynthesis;
         if (!synth) return resolve();
+        let done = false;
+        const end = () => { if (!done) { done = true; finish = null; clearTimeout(vigia); resolve(); } };
         const u = new SpeechSynthesisUtterance(text);
         u.lang = 'pt-BR';
         u.rate = 0.9;
-        u.onend = u.onerror = () => resolve();
-        finish = resolve;
+        u.onend = u.onerror = end;
+        finish = end;
+        vigiar(Math.max(4000, text.length * 150), end);
         synth.speak(u);
       });
     },
